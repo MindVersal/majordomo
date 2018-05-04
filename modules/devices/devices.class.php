@@ -200,7 +200,25 @@ function getAllProperties($type) {
         }
     }
     return $properties;
-}    
+}
+
+    function getAllMethods($type) {
+        $methods=$this->device_types[$type]['METHODS'];
+        $parent_class=$this->device_types[$type]['PARENT_CLASS'];
+        if ($parent_class!='') {
+            foreach($this->device_types as $k=>$v) {
+                if ($v['CLASS']==$parent_class) {
+                    $parent_methods=$this->getAllMethods($k);
+                    foreach($parent_methods as $pk=>$pv) {
+                        if (!isset($methods[$pk])) {
+                            $methods[$pk]=$pv;
+                        }
+                    }
+                }
+            }
+        }
+        return $methods;
+    }
     
 function getNewObjectIndex($class) {
     $objects=getObjectsByClass($class);
@@ -226,6 +244,7 @@ function processDevice($device_id) {
     $result=array('HTML'=>'','DEVICE_ID'=>$device_rec['ID']);
 
     $template=getObjectClassTemplate($device_rec['LINKED_OBJECT']);
+
     $result['HTML']=processTitle($template,$this);
     if ($device_rec['TYPE']=='camera') {
         $result['HEIGHT']=5;
@@ -335,7 +354,7 @@ function renderStructure() {
           }
       }
   }
-  subscribeToEvent('devices', 'COMMAND', '', 100);
+  subscribeToEvent('devices', 'COMMAND');
 
   //update cameras
     $objects = getObjectsByClass('SCameras');
@@ -552,6 +571,9 @@ function usual(&$out) {
             }
         }
     }
+    usort($types, function($a,$b) {
+        return strcmp($a["TITLE"], $b["TITLE"]);
+    });
     $out['TYPES']=$types;
 
 

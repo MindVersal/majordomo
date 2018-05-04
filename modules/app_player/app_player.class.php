@@ -211,6 +211,11 @@ function usual(&$out) {
 
 
  global $ajax;
+ if ($this->ajax) {
+  $ajax=1;
+ }
+
+
  if ($ajax!='') {
   global $command;
   if ($command!='') {
@@ -286,7 +291,8 @@ function usual(&$out) {
 
    } elseif ($terminal['PLAYER_TYPE']=='xbmc') {
     include(DIR_MODULES.'app_player/xbmc.php');
-
+    } elseif ($terminal['PLAYER_TYPE']=='ghn') {
+     include(DIR_MODULES.'app_player/ghn.php');
    } elseif ($terminal['PLAYER_TYPE']=='foobar') {
     include(DIR_MODULES.'app_player/foobar.php');
    } elseif ($terminal['PLAYER_TYPE']=='vlcweb') {

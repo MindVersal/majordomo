@@ -12,6 +12,7 @@ $dictionary=array(
 
 /* general */
 'WIKI_URL'=>'http://majordomohome.com/',
+'KB_URL'=>'https://kb.smartliving.ru/',
 'DEFAULT_COMPUTER_NAME'=>'Alice',
 'WELCOME_GREETING'=>'Welcome!',
 'WELCOME_TEXT'=>'Thank you for using MajorDoMo -- an open-source home automation platform. <br/><br/>Read more about it and join our community: <a href="<#LANG_WIKI_URL#>" target=_blank>Web-site</a> | <a href="<#LANG_WIKI_URL#>forum/" target=_blank>Forum</a> | <a href="https://www.facebook.com/SmartLivingRu" target=_blank>Facebook page</a> <br/>&nbsp;<br/>&nbsp;<br/><small>P.S. You can customize or delete this page using <a href="/admin.php?pd=&md=panel&inst=&action=layouts">Control Panel</a></small>',
@@ -1106,6 +1107,7 @@ $dictionary=array(
     'DEVICES_NOTIFY_OUTOFRANGE' => 'Value is out of normal range',
     'DEVICES_NOTIFY_BACKTONORMAL' => 'Value is back to normal',
     'DEVICES_MOTION_IGNORE' => 'Ignore device events when nobody\'s home',
+    'DEVICES_MOTION_TIMEOUT' => 'Activity timeout (sec)',
     'DEVICES_ALIVE_TIMEOUT' => 'Possible inactivity timeout (hours)',
     'DEVICES_MAIN_SENSOR' => 'Main sensor for the room',
 
@@ -1126,6 +1128,10 @@ $dictionary=array(
     'DEVICES_IS_ACTIVITY' => 'Status change means activity in the room',
     'DEVICES_NCNO' => 'Device/Sensor type',
     'DEVICES_LOADTYPE' => 'Device type',
+    'DEVICES_LOADTYPE_VENT' => 'Ventilation',
+    'DEVICES_LOADTYPE_HEATING' => 'Heating',
+    'DEVICES_LOADTYPE_CURTAINS' => 'Curtains',
+    'DEVICES_LOADTYPE_GATES' => 'Gates',
     'DEVICES_LOADTYPE_LIGHT' => 'Light',
     'DEVICES_LOADTYPE_POWER' => 'Other',
 
@@ -1175,6 +1181,7 @@ $dictionary=array(
     'DEVICES_DEGREES' => 'degrees',
     'DEVICES_STATUS_OPEN' => 'is open',
     'DEVICES_STATUS_CLOSED' => 'is closed',
+    'DEVICES_STATUS_ALARM' => 'alarm state',
     'DEVICES_COMMAND_CONFIRMATION' => 'Done|Ok',
 
     'DEVICES_ROOMS_NOBODYHOME' => 'Nobody home',
@@ -1214,9 +1221,24 @@ $dictionary=array(
     'DEVICES_THERMOSTAT_RELAY_STATUS' => 'Relay status',
     'DEVICES_ALL_BY_TYPE' => 'List all by types',
     'DEVICES_ALL_BY_ROOM' => 'List all by rooms',
+    'DEVICES_LOAD_TIMEOUT'=>'Load status timeout',
 
     'AUTO_LINK' => 'Execute script automatically',
     'FAVORITE_DEVICE' => 'Favorite device',
+
+    'ROOMS' => 'Rooms',
+    'APPEARANCE' => 'Appearance',
+    'MAINTENANCE' => 'Maintenance',
+    'LIST' => 'List',
+    'DATA_OPTIMIZING' => 'Data Optimizing',
+    'DID_YOU_KNOW' => 'Did you know that...',
+    'NEWS' => 'MajorDoMo News',
+    'KNOWLEDGE_BASE' => 'Knowledge Base',
+    'ACTIVITIES' => 'Activities',
+    'COMMANDS' => 'Commands',
+    'ADDON_FILE' => 'Addon package',
+    'UPLOAD_AND_INSTALL' => 'Upload and Install',
+    'ADD_UPDATE_MANUALLY' =>'Add/Update Manually',
 
 'TEST'=>'test'
 

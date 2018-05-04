@@ -12,6 +12,7 @@ $dictionary = array(
 
     /* general */
     'WIKI_URL' => 'http://smartliving.ru/',
+    'KB_URL'=>'https://kb.smartliving.ru/',
     'DEFAULT_COMPUTER_NAME' => 'Алиса',
     'WELCOME_GREETING' => 'Добро пожаловать!',
     'WELCOME_TEXT' => 'Спасибо, что пользуйтесь MajorDoMo -- открытой платформой домашней автоматизации. <br/><br/>Узнайте больше и присоединяйтесь к сообществу: <a href="<#LANG_WIKI_URL#>" target=_blank>Веб-сайт</a> | <a href="<#LANG_WIKI_URL#>forum/" target=_blank>Форум</a> | <a href="https://www.facebook.com/SmartLivingRu" target=_blank>Facebook страница</a> <br/>&nbsp;<br/>&nbsp;<br/><small>P.S. Вы можете изменить или удалить эту страницу через <a href="/admin.php?pd=&md=panel&inst=&action=layouts">Панель управления</a></small>',
@@ -1096,11 +1097,12 @@ $dictionary = array(
 
     'DEVICES_MIN_VALUE' => 'Нижний порог',
     'DEVICES_MAX_VALUE' => 'Верхний порог',
-    'DEVICES_NOTIFY' => 'Умедомлять при выходе за порог',
+    'DEVICES_NOTIFY' => 'Уведомлять при выходе за порог',
     'DEVICES_NORMAL_VALUE' => 'Значение в нормальных пределах',
     'DEVICES_NOTIFY_OUTOFRANGE' => 'Значение датчика вышло за порог',
     'DEVICES_NOTIFY_BACKTONORMAL' => 'Значение датчика вернулось к норме',
     'DEVICES_MOTION_IGNORE' => 'Игнорировать события от устройства, когда никого нет дома',
+    'DEVICES_MOTION_TIMEOUT' => 'Время активности (секунд)',
     'DEVICES_ALIVE_TIMEOUT' => 'Допустимое время отсутствия данных (часов)',
     'DEVICES_MAIN_SENSOR' => 'Основной сенсор помещения',
     'DEVICES_NOT_UPDATING' => 'не обновляется',
@@ -1121,6 +1123,10 @@ $dictionary = array(
     'DEVICES_IS_ACTIVITY' => 'Изменение означает активность в помещении',
     'DEVICES_NCNO' => 'Тип устройства/сенсора',
     'DEVICES_LOADTYPE' => 'Тип устройства',
+    'DEVICES_LOADTYPE_VENT' => 'Вентиляция',
+    'DEVICES_LOADTYPE_HEATING' => 'Обогрев',
+    'DEVICES_LOADTYPE_CURTAINS' => 'Шторы',
+    'DEVICES_LOADTYPE_GATES' => 'Ворота',
     'DEVICES_LOADTYPE_LIGHT' => 'Освещение',
     'DEVICES_LOADTYPE_POWER' => 'Разное',
 
@@ -1169,6 +1175,7 @@ $dictionary = array(
     'DEVICES_DEGREES' => 'градусов',
     'DEVICES_STATUS_OPEN' => 'открыт',
     'DEVICES_STATUS_CLOSED' => 'закрыт',
+    'DEVICES_STATUS_ALARM' => 'состояние тревоги',
     'DEVICES_COMMAND_CONFIRMATION' => 'Готово|Сделано|Как пожелаете',
 
     'DEVICES_ROOMS_NOBODYHOME' => 'Никого нет.',
@@ -1208,9 +1215,25 @@ $dictionary = array(
     'DEVICES_THERMOSTAT_RELAY_STATUS' => 'Статус реле',
     'DEVICES_ALL_BY_TYPE' => 'Все по типам',
     'DEVICES_ALL_BY_ROOM' => 'Все по комнатам',
+    'DEVICES_LOAD_TIMEOUT'=>'Таймер изменения статуса нагрузки',
 
     'AUTO_LINK' => 'Автоматический запуск сценария',
     'FAVORITE_DEVICE' => 'В списке быстрого доступа',
+
+    'ROOMS' => 'Комнаты',
+    'APPEARANCE' => 'Внешний вид',
+    'MAINTENANCE' => 'Обслуживание',
+    'LIST' => 'Список',
+    'DATA_OPTIMIZING' => 'Оптимизация данных',
+    'DID_YOU_KNOW' => 'А знаете ли вы что...',
+    'NEWS' => 'Новости MajorDoMo',
+    'KNOWLEDGE_BASE' => 'База знаний',
+    'ACTIVITIES' => 'Поведение',
+    'COMMANDS' => 'Команды',
+    'ADDON_FILE' => 'Файл дополнения',
+    'UPLOAD_AND_INSTALL' => 'Загрузить и установить',
+    'ADD_UPDATE_MANUALLY' =>'Добавить/обновить вручную',
+
 
     /* end module names */
 

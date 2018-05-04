@@ -25,7 +25,6 @@ $run_from_start = 0;
 setGlobal('ThisComputer.started_time', time());
 getObject('ThisComputer')->raiseEvent("StartUp");
 
-
 $sqlQuery = "SELECT *
                FROM classes
               WHERE TITLE LIKE 'timer'";
@@ -103,6 +102,7 @@ while (1) {
 
     }
 
+    /*
     $keep = SQLSelect("SELECT DISTINCT VALUE_ID, KEEP_HISTORY FROM phistory_queue");
     if ($keep[0]['VALUE_ID']) {
         $total = count($keep);
@@ -114,10 +114,14 @@ while (1) {
                 $table_name = 'phistory';
             }
             if ($keep_rec['KEEP_HISTORY'] == 0) continue;
-            SQLExec("DELETE FROM $table_name WHERE VALUE_ID='" . $keep_rec['VALUE_ID'] . "' AND TO_DAYS(NOW())-TO_DAYS(ADDED)>" . (int)$keep_rec['KEEP_HISTORY']);
+            $start_tm = date('Y-m-d H:i:s',(time()-(int)$keep_rec['KEEP_HISTORY']*24*60*60));
+            echo date('Y-m-d H:i:s').' '.("DELETE FROM $table_name WHERE VALUE_ID='" . $keep_rec['VALUE_ID'] . "' AND ADDED<('$start_tm')\n");
+            SQLExec("DELETE FROM $table_name WHERE VALUE_ID='" . $keep_rec['VALUE_ID'] . "' AND ADDED<('$start_tm')");
+            echo date('Y-m-d H:i:s ')." Done \n";
         }
     }
-
+    */
+    /*
     $queue = SQLSelect("SELECT * FROM phistory_queue ORDER BY ID LIMIT 500");
     if ($queue[0]['ID']) {
         $total = count($queue);
@@ -127,6 +131,7 @@ while (1) {
             $value = $q_rec['VALUE'];
             $old_value = $q_rec['OLD_VALUE'];
 
+            //echo "Queue $i / $total\n";
             SQLExec("DELETE FROM phistory_queue WHERE ID='" . $q_rec['ID'] . "'");
 
             if (defined('SEPARATE_HISTORY_STORAGE') && SEPARATE_HISTORY_STORAGE == 1) {
@@ -136,33 +141,46 @@ while (1) {
             }
 
             if ($value != $old_value || (defined('HISTORY_NO_OPTIMIZE') && HISTORY_NO_OPTIMIZE == 1)) {
-                if (!$processed[$q_rec['VALUE_ID']] || ((time() - $processed[$q_rec['VALUE_ID']]) > 8 * 60 * 60)) {
-                    SQLExec("DELETE FROM $table_name WHERE VALUE_ID='" . $q_rec['VALUE_ID'] . "' AND TO_DAYS(NOW())-TO_DAYS(ADDED)>" . (int)$q_rec['KEEP_HISTORY']);
+                if (!isset($processed[$q_rec['VALUE_ID']])) {
+                    $processed[$q_rec['VALUE_ID']]=time();
+                }
+                if ((time() - $processed[$q_rec['VALUE_ID']]) > 8 * 60 * 60) {
+                    $start_tm = date('Y-m-d H:i:s',(time()-(int)$q_rec['KEEP_HISTORY']*24*60*60));
+                    //echo date('Y-m-d H:i:s').("processing DELETE FROM $table_name WHERE VALUE_ID='" . $q_rec['VALUE_ID'] . "' AND ADDED<('".$start_tm."')\n");
+                    SQLExec("DELETE FROM $table_name WHERE VALUE_ID='" . $q_rec['VALUE_ID'] . "' AND ADDED<('".$start_tm."')");
                     $processed[$q_rec['VALUE_ID']] = time();
+                    //echo date('Y-m-d H:i:s ')." Done \n";
                 }
                 $h = array();
                 $h['VALUE_ID'] = $q_rec['VALUE_ID'];
                 $h['ADDED'] = $q_rec['ADDED'];
                 $h['VALUE'] = $value;
+                //echo date('Y-m-d H:i:s ')." Insert new value ".$h['VALUE_ID']."\n";
                 $h['ID'] = SQLInsert($table_name, $h);
+                //echo date('Y-m-d H:i:s ')." Done \n";
             } elseif ($value == $old_value) {
                 $tmp_history = SQLSelect("SELECT * FROM $table_name WHERE VALUE_ID='" . $q_rec['VALUE_ID'] . "' ORDER BY ID DESC LIMIT 2");
                 $prev_value = $tmp_history[0]['VALUE'];
                 $prev_prev_value = $tmp_history[1]['VALUE'];
                 if ($prev_value == $prev_prev_value) {
                     $tmp_history[0]['ADDED'] = $q_rec['ADDED'];
+                    //echo date('Y-m-d H:i:s ')." Update same value ".$tmp_history[0]['VALUE_ID']."\n";
                     SQLUpdate($table_name, $tmp_history[0]);
+                    //echo date('Y-m-d H:i:s ')." Done \n";
                 } else {
                     $h = array();
                     $h['VALUE_ID'] = $q_rec['VALUE_ID'];
                     $h['ADDED'] = $q_rec['ADDED'];
                     $h['VALUE'] = $value;
+                    //echo date('Y-m-d H:i:s ')." Insert same value ".$h['VALUE_ID']."\n";
                     $h['ID'] = SQLInsert($table_name, $h);
+                    //echo date('Y-m-d H:i:s ')." Done \n";
                 }
             }
 
         }
     }
+    */
 
     if ($dt != $old_date) {
         //echo "new day\n";

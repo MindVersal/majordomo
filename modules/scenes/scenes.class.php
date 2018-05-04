@@ -359,7 +359,8 @@ function admin(&$out) {
  }
 
  if ($this->view_mode=='import') {
-  $this->import_scene();
+  global $file;
+  $this->import_scene($file);
  }
 
 
@@ -374,7 +375,8 @@ function admin(&$out) {
  * @access public
  */
  function export_scene($id) {
-  $rec=SQLSelectOne("SELECT * FROM scenes WHERE ID='".(int)$id."'"); 
+  $rec=SQLSelectOne("SELECT * FROM scenes WHERE ID='".(int)$id."'");
+  unset($rec['SYSTEM']);
   //elements
   $elements=SQLSelect("SELECT * FROM elements WHERE SCENE_ID='".(int)$id."'");
   $total=count($elements);
@@ -439,13 +441,15 @@ function admin(&$out) {
 *
 * @access public
 */
- function import_scene() {
-  global $file;
-  global $overwrite;
-
+ function import_scene($file, $system = '') {
   $data=unserialize(LoadFile($file));
-
   if ($data['SCENE_DATA']) {
+   if ($system!='') {
+    $old_rec=SQLSelectOne("SELECT ID FROM scenes WHERE SYSTEM LIKE '".DBSafe($system)."'");
+    if ($old_rec['ID']) {
+     return;
+    }
+   }
    $rec=$data['SCENE_DATA'];
    if (!$rec['WALLPAPER']) {
     unset($rec['WALLPAPER']);
@@ -630,6 +634,7 @@ function usual(&$out) {
       for($i=0;$i<$total;$i++) {
        if (is_array($elements[$i]['STATES'])) {
         foreach($elements[$i]['STATES'] as $st) {
+         if ($elements[$i]['TYPE']=='container') unset($st['HTML']);
          $states[]=$st;
         }
        }
@@ -697,6 +702,7 @@ function usual(&$out) {
       for($i=0;$i<$total;$i++) {
        if (is_array($elements[$i]['STATES'])) {
         foreach($elements[$i]['STATES'] as $st) {
+         if ($elements[$i]['TYPE']=='container') unset($st['HTML']);
          $states[]=$st;
         }
        }
@@ -1174,6 +1180,17 @@ function usual(&$out) {
          $elements[$ie]['STATES']=$states;
          $res2[]=$elements[$ie];
        }
+
+       if (is_array($elements[$ie]['STATES'])) {
+        $total_states=count($elements[$ie]['STATES']);
+        for($is=0;$is<$total_states;$is++) {
+         if ($elements[$ie]['TYPE']=='container') {
+          unset($elements[$ie]['STATES'][$is]['HTML']);
+         }
+        }
+       }
+
+
       }
       return $res2;
 
@@ -1230,6 +1247,9 @@ function usual(&$out) {
        if ($elements[$ie]['TYPE']=='container') {
         if (!is_array($options) || $options['ignore_sub']!=1) {
          startMeasure('getSubElements');
+         $elements[$ie]['STATE']=$elements[$ie]['STATES'][0]['STATE'];
+         $elements[$ie]['STATE_ID']=$elements[$ie]['STATES'][0]['ID'];
+
          if (checkAccess('scene_elements', $elements[$ie]['ID'])) {
           $elements[$ie]['ELEMENTS']=$this->getElements("CONTAINER_ID=".(int)$elements[$ie]['ID'], $options);
          } else {
@@ -1352,9 +1372,10 @@ function usual(&$out) {
    return;
   }
 
+   $enable_style_caching = false;
    $cache_file=ROOT.'cached/styles_'.$type.'.txt';
 
-   if (file_exists($cache_file) && (time()-filemtime($cache_file))<1*60*60) {
+   if ($enable_style_caching && file_exists($cache_file) && (time()-filemtime($cache_file))<1*60*60) {
     $styles_recs=unserialize(LoadFile($cache_file));
    } else {
    startMeasure('openAndReadDir');
@@ -1462,7 +1483,9 @@ function usual(&$out) {
      }
     }
 
-    SaveFile($cache_file, serialize($styles_recs));
+    if ($enable_style_caching && count($styles_recs)>0) {
+     SaveFile($cache_file, serialize($styles_recs));
+    }
     endMeasure('openAndReadDir');
 
     }
@@ -1583,6 +1606,7 @@ elm_states - Element states
  scenes: AUTO_SCALE int(3) NOT NULL DEFAULT '0'
  scenes: WALLPAPER_FIXED int(3) NOT NULL DEFAULT '0'
  scenes: WALLPAPER_NOREPEAT int(3) NOT NULL DEFAULT '0'
+ scenes: SYSTEM varchar(255) NOT NULL DEFAULT '' 
 
  elements: ID int(10) unsigned NOT NULL auto_increment
  elements: SCENE_ID int(10) NOT NULL DEFAULT '0'
